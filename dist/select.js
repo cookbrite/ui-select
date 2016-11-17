@@ -724,6 +724,8 @@ uis.controller('uiSelectCtrl',
           ctrl.close(skipFocusser);
         }
       }
+    } else {
+      $scope.$broadcast('uis:deselect', item);
     }
   };
 
@@ -1684,6 +1686,13 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
         $selectMultiple.updateModel();
       });
 
+      scope.$on('uis:deselect', function (event, item) {
+        var idx = $select.selected.indexOf(item);
+        if (idx >= 0) {
+          $selectMultiple.removeChoice(idx);
+        }
+      });
+
       scope.$on('uis:activate', function () {
         $selectMultiple.activeMatchIndex = -1;
       });
@@ -2026,6 +2035,12 @@ uis.directive('uiSelectSingle', ['$timeout','$compile', function($timeout, $comp
 
       scope.$on('uis:select', function (event, item) {
         $select.selected = item;
+      });
+
+      scope.$on('uis:deselect', function (event, item) {
+        if ($select.selected === item) {
+          $select.selected = undefined;
+        }
       });
 
       scope.$on('uis:close', function (event, skipFocusser) {
