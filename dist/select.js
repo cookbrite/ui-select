@@ -858,9 +858,11 @@ uis.controller('uiSelectCtrl',
         if (!ctrl.open && ctrl.multiple) ctrl.activate(false, true); //In case its the search input in 'multiple' mode
         else if (ctrl.activeIndex > 0 || (ctrl.search.length === 0 && ctrl.tagging.isActivated && ctrl.activeIndex > -1)) { ctrl.activeIndex--; }
         break;
-      case KEY.TAB:
-        if (!ctrl.multiple || ctrl.open) ctrl.select(ctrl.items[ctrl.activeIndex], true);
-        break;
+      // 2016-11-16: Quill Changes: This case is commented out because we don't want to add the 1st option in the list
+      // when pressing tab right after a search. (The cursor is technically in the search input.)
+      // case KEY.TAB:
+      //   if (!ctrl.multiple || ctrl.open) ctrl.select(ctrl.items[ctrl.activeIndex], true);
+      //   break;
       case KEY.ENTER:
         if(ctrl.open && (ctrl.tagging.isActivated || ctrl.activeIndex >= 0)){
           ctrl.select(ctrl.items[ctrl.activeIndex], ctrl.skipFocusser); // Make sure at least one dropdown item is highlighted before adding if not in tagging mode
@@ -1792,7 +1794,9 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
             return;
           }
           // always reset the activeIndex to the first item when tagging
-          $select.activeIndex = $select.taggingLabel === false ? -1 : 0;
+          // 2016-11-16: Quill Changes: This case is commented out because we don't want to the activeIndex to reset
+          // to the first item after selection.
+          // $select.activeIndex = $select.taggingLabel === false ? -1 : 0;
           // taggingLabel === false bypasses all of this
           if ($select.taggingLabel === false) return;
 
