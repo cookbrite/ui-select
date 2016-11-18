@@ -44,6 +44,8 @@ uis.directive('uiSelect',
         $select.focusserTitle = $select.baseTitle + ' focus';
         $select.focusserId = 'focusser-' + $select.generatedId;
 
+        $select.keyProperty = attrs.keyProperty;
+
         $select.closeOnSelect = function() {
           if (angular.isDefined(attrs.closeOnSelect)) {
             return $parse(attrs.closeOnSelect)();
