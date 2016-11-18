@@ -18,6 +18,7 @@ uis.controller('uiSelectCtrl',
   ctrl.refreshDelay = uiSelectConfig.refreshDelay;
   ctrl.paste = uiSelectConfig.paste;
 
+  ctrl.keyProperty = undefined;
   ctrl.removeSelected = uiSelectConfig.removeSelected; //If selected item(s) should be removed from dropdown list
   ctrl.closeOnSelect = true; //Initialized inside uiSelect directive link function
   ctrl.skipFocusser = false; //Set to true to avoid returning focus to ctrl when item is selected
