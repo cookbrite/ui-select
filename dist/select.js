@@ -298,6 +298,7 @@ uis.controller('uiSelectCtrl',
   ctrl.spinnerEnabled = uiSelectConfig.spinnerEnabled;
   ctrl.spinnerClass = uiSelectConfig.spinnerClass;
 
+  ctrl.keyProperty = undefined;
   ctrl.removeSelected = uiSelectConfig.removeSelected; //If selected item(s) should be removed from dropdown list
   ctrl.closeOnSelect = true; //Initialized inside uiSelect directive link function
   ctrl.skipFocusser = false; //Set to true to avoid returning focus to ctrl when item is selected
@@ -1082,6 +1083,8 @@ uis.directive('uiSelect',
         $select.focusserTitle = $select.baseTitle + ' focus';
         $select.focusserId = 'focusser-' + $select.generatedId;
 
+        $select.keyProperty = attrs.keyProperty;
+
         $select.closeOnSelect = function() {
           if (angular.isDefined(attrs.closeOnSelect)) {
             return $parse(attrs.closeOnSelect)();
@@ -1686,8 +1689,22 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
         $selectMultiple.updateModel();
       });
 
+      function getIndexForItem(item) {
+        if ($select.keyProperty) {
+          var key = item[$select.keyProperty];
+          if (key !== undefined) {
+            var idx = $select.selected.findIndex(function(selectedItem, index) {
+              return key === selectedItem[$select.keyProperty];
+            });
+            return idx;
+          }
+        }
+
+        return $select.selected.indexOf(item);
+      }
+
       scope.$on('uis:deselect', function (event, item) {
-        var idx = $select.selected.indexOf(item);
+        var idx = getIndexForItem(item);
         if (idx >= 0) {
           $selectMultiple.removeChoice(idx);
         }
